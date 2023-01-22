@@ -1,0 +1,101 @@
+{
+  "log": {
+    "access": "/var/log/v2ray/access.log",
+    "error": "/var/log/v2ray/error.log",
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "listen": "0.0.0.0",
+      "port": 1010,
+      "protocol": "socks",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 1110,
+      "protocol": "http",
+      "settings": {}
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 1210,
+      "protocol": "shadowsocks",
+      "settings": {
+        "password": "FR33DoM",
+        "method": "aes-128-gcm",
+        "level": 0,
+        "network": "tcp,udp"
+      }
+    },
+    {
+      "listen": "0.0.0.0",
+      "port": 1310,
+      "protocol": "vmess",
+      "settings": {
+        "clients": [
+          {
+            "id": "869921fa-27b5-417c-b248-f880738c3ada",
+            "alterId": 0,
+            "security": "aes-128-gcm"
+          }
+        ]
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "tag": "proxy",
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "16244a26-e3fc-4b91-9a2a-fee5a1a325cc.hsvc.ir",
+            "port": 1310,
+            "users": [
+              {
+                "id": "0c2643ac-6908-4bc8-9348-e904611d6713",
+                "alterId": 0,
+                "security": "none"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws"
+      },
+      "mux": {
+        "enabled": true
+      }
+    },
+    {
+      "protocol": "freedom",
+      "tag": "freedom"
+    }
+  ],
+  "dns": {
+    "servers": [
+      "8.8.8.8",
+      "8.8.4.4",
+      "localhost"
+    ]
+  },
+  "routing": {
+    "domainStrategy": "IPIfNonMatch",
+    "settings": {
+      "rules": [
+        {
+          "type": "field",
+          "outboundTag": "freedom",
+          "domain": [
+            "regexp:.*\\.ir$"
+          ]
+        }
+      ]
+    }
+  }
+}
